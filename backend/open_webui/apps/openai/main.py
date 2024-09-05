@@ -177,6 +177,31 @@ async def speech(request: Request, user=Depends(get_verified_user)):
 
 
 async def fetch_url(url, key):
+    # HACK HACK HACK
+    if url == "https://api.perplexity.ai/models":
+        models = [
+            "llama-3.1-sonar-small-128k-online",
+            "llama-3.1-sonar-large-128k-online",
+            "llama-3.1-sonar-huge-128k-online",
+            "llama-3.1-sonar-small-128k-chat",
+            "llama-3.1-sonar-large-128k-chat",
+            "llama-3.1-8b-instruct",
+            "llama-3.1-70b-instruct",
+        ]
+        return {
+            "object": "list",
+            "data": [
+                {
+                    "id": model,
+                    "object": "model",
+                    "created": 0,
+                    "owned_by": "system",
+                }
+                for model in models
+            ]
+        }
+    # HACK HACK HACK
+
     timeout = aiohttp.ClientTimeout(total=5)
     try:
         headers = {"Authorization": f"Bearer {key}"}
